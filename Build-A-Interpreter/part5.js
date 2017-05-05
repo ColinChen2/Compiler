@@ -6,9 +6,22 @@
  2.'5-3', '23+3'
  3.'5-2+12', '23+12+233-2'
  4.'7*4/2'
+ 5.'2+7*4'
+
+ key-point:
+ how to deal with associativity and precedence?
+ 1.backtrack operate.(回溯)
+ 2.use stack.
+ 3.postfix expression - > stack
+
+思路：递归。
+1.用循环而不是递归调用。
+2.用函数调用， 函数调用本身就是调用栈，也就是一种递归。
  */
-const [INTEGER, MUL, DIV, EOF] = ['INTEGER', 'MUL', 'DIV', 'EOF'];
-const OPS = ['MUL', 'DIV'];
+
+const [INTEGER, PLUS, MINUS, MUL, DIV, EOF] = ['INTEGER', 'PLUS', 'MINUS', 'MUL', 'DIV', 'EOF'];
+const PREFIRST = ['MUL', 'DIV'];
+const PRESECOND = ['PLUS', 'MINUS'];
 
 class Token {
     constructor(type, value) {
@@ -69,6 +82,16 @@ class Lexer {
                 return new Token(INTEGER, this.integer())
             }
 
+            if (this.currentChar === '+') {
+                this.advance();
+                return new Token(PLUS, '+');
+            }
+
+            if (this.currentChar === '-') {
+                this.advance();
+                return new Token(MINUS, '-');
+            }
+
             if (this.currentChar === '*') {
                 this.advance();
                 return new Token(MUL, '*');
@@ -111,14 +134,10 @@ class Interpreter {
         return Number(token.value);
     }
 
-    /*
-     expr   : factor ((MUL | DIV) factor)*
-     factor : INTEGER
-     */
-    expr() {
+    term() {
         var result = this.factor();
 
-        while (OPS.includes(this.currentToken.type)) {
+        while (PREFIRST.includes(this.currentToken.type)) {
             var token = this.currentToken;
 
             if (token.type === MUL) {
@@ -127,6 +146,29 @@ class Interpreter {
             } else if (token.type === DIV) {
                 this.eat(DIV);
                 result = result / this.factor();
+            }
+        }
+
+        return result;
+    }
+
+    /*
+     expr   : term ((plus | minus) term)*
+     term   : factor ((MUL | DIV) factor)*
+     factor : INTEGER
+     */
+    expr() {
+        var result = this.term();
+
+        while (PRESECOND.includes(this.currentToken.type)) {
+            var token = this.currentToken;
+
+            if (token.type === PLUS) {
+                this.eat(PLUS);
+                result = result + this.term();
+            } else if (token.type === MINUS) {
+                this.eat(MINUS);
+                result = result - this.term();
             }
         }
 
@@ -154,4 +196,3 @@ function main() {
 }
 
 main();
-
