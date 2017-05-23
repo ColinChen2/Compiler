@@ -13,5 +13,5 @@ every part of the code in Build-A-Interpreter can be run.
 example:
 
 ```javascript
-node Build-A-Interpreter/part4.js "2*3*4/2"
+node Build-A-Interpreter/chapter1/part4.js "2*3*4/2"
 ```

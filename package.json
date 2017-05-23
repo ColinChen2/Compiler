@@ -1,0 +1,24 @@
+{
+  "name": "compiler",
+  "version": "1.0.0",
+  "description": "create a compiler(interpreter) step by step",
+  "main": "index.js",
+  "dependencies": {
+    "d3": "^4.9.1",
+    "jsdom": "^11.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ColinChen2/Compiler.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ColinChen2/Compiler/issues"
+  },
+  "homepage": "https://github.com/ColinChen2/Compiler#readme"
+}
