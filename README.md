@@ -12,6 +12,10 @@ All in the blog use Python to code. However, I prefer to use js and That's what 
 every part of the code in Build-A-Interpreter can be run.
 example:
 
+In chapter1
 ```javascript
-node Build-A-Interpreter/chapter1/part4.js "2*3*4/2"
+node interpreter/chapter1/part4.js "2*3*4/2"
 ```
+
+In chapter2
+your can view them in browser.

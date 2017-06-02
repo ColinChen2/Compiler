@@ -1,0 +1,14 @@
+circle {
+    fill: white;
+    stroke: steelblue;
+    stroke-width: 2px;
+}
+
+line {
+    stroke: grey;
+    stroke-width: 3px;
+}
+
+text {
+    text-anchor: middle;
+}
