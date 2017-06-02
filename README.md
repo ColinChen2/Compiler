@@ -1,15 +1,15 @@
 # Compiler
-create a compiler(interpreter) step by step
+Create a compiler(interpreter) step by step
 
-In order to know more about compile, I look up some video and book, But I find a good blog.
-Good job!
+In order to know more about compile, I look up some video and book, after read them. I don't think understand totally. At the same time, I find a good blog.
+It's great example, Good job!
 
 Thanks for [Ruslans'blog](https://ruslanspivak.com/lsbasi-part1/).
 
 All in the blog use Python to code. However, I prefer to use js and That's what we do now.
 
 ## RUN
-every part of the code in Build-A-Interpreter can be run.
+every part of the code interpreter can be run.
 example:
 
 In chapter1
