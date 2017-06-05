@@ -12,3 +12,9 @@ line {
 text {
     text-anchor: middle;
 }
+
+.link {
+    fill: none;
+    stroke: grey;
+    stroke-width: 2px;
+}
