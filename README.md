@@ -18,4 +18,8 @@ node interpreter/chapter1/part4.js "2*3*4/2"
 ```
 
 In chapter2
+```
+npm install
+npm start
+```
 your can view them in browser.
