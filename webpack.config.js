@@ -7,7 +7,7 @@ module.exports = {
         tree2: './docs/example/binaryTree2.js',
     },
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'docs/dist'),
         filename: './[name].bundle.js'
     },
     resolve: {

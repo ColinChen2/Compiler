@@ -22,4 +22,6 @@ In chapter2
 npm install
 npm start
 ```
-your can view them in browser.
+
+1. Your can use node script like chapter1.
+2. Your can also view them in browser: [github.io](https://colinchen2.github.io/Compiler).
