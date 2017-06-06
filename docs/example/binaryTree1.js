@@ -1,7 +1,7 @@
 // var fs = require('fs');
 // var jsdom = require('jsdom');
 var d3 = require('d3');
-var calculator = require('../chapter2/part7');
+var calculator = require('part7');
 
 const [svgW, svgH] = [800, 400];
 const [branchOffsetX, branchOffsetY] = [20, 40];

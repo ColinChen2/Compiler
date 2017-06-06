@@ -5,7 +5,7 @@
  */
 
 var d3 = Object.assign({}, require("d3-selection"), require('d3-hierarchy'), require('d3-shape'));
-var calculator = require('../chapter2/part7');
+var calculator = require('part7');
 
 const [svgW, svgH] = [800, 400];
 const [circleRadius] = [12];
