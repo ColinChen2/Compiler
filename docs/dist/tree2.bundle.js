@@ -2722,8 +2722,7 @@ function renderCircles(data) {
 
     circles.exit().remove();
 
-    circles.enter().append('circle')
-        .attr('r', circleRadius).attr('cx', function (d) {
+    circles.enter().append('circle').attr('r', circleRadius).merge(circles).attr('cx', function (d) {
         return d.x;
     }).attr('cy', function (d) {
         return d.y;
@@ -2755,7 +2754,7 @@ function renderLines(data) {
     var lines = d3.select('#g_lines').selectAll('path').data(data);
 
     lines.exit().remove();
-    lines.enter().append('path').classed('link', true).attr('d', link);
+    lines.enter().append('path').merge(lines).classed('link', true).attr('d', link);
 }
 
 function renderTree(data) {
