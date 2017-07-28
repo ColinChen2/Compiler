@@ -6,7 +6,7 @@
   "dependencies": {
     "d3": "^4.9.1",
     "jsdom": "^11.0.0",
-    "webpack": "^2.6.1"
+    "webpack": "^3.0.0"
   },
   "devDependencies": {},
   "scripts": {
