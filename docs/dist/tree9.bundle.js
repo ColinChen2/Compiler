@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 136);
+/******/ 	return __webpack_require__(__webpack_require__.s = 139);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -2021,196 +2021,7 @@ CardinalOpen.prototype = {
 
 
 /***/ }),
-/* 49 */
-/***/ (function(module, exports) {
-
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-
-/***/ }),
+/* 49 */,
 /* 50 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -5934,18 +5745,157 @@ function stackValue(d, key) {
 
 
 /***/ }),
-/* 133 */
+/* 133 */,
+/* 134 */,
+/* 135 */,
+/* 136 */,
+/* 137 */,
+/* 138 */,
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(process) {/*
-1.generate a AST form '7+3*(10-2)'
-2.convert AST to SVG
+/**
+ * version1 has some problem, so in v2:
+ * 1.Use D3 adequately. we can d3-hierarchy, d3-shape
+ * 2.Use group to set start.
+ */
+
+const d3 = Object.assign({}, __webpack_require__(50), __webpack_require__(84), __webpack_require__(106));
+const interpreter = __webpack_require__(140);
+
+const [svgW, svgH] = [1000, 400];
+const [circleRadius] = [15];
+const NODE_SIZE = [80, 40];
+const ROOT_POINT = {x: 650, y: 40};
+
+function renderCircles(data) {
+    let circles = d3.select('#g_circles').selectAll('circle').data(data);
+
+    circles.exit().remove();
+
+    circles.enter().append('circle').attr('r', circleRadius).merge(circles).attr('cx', function (d) {
+        return d.x;
+    }).attr('cy', function (d) {
+        return d.y;
+    });
+}
+
+function renderTexts(data) {
+    let texts = d3.select('#g_texts').selectAll('text').data(data);
+
+    texts.exit().remove();
+
+    texts.enter().append('text').merge(texts).text(function (d) {
+        return d.data.token ? d.data.token.value : 'N/A';
+    }).attr('x', function (d) {
+        return d.x;
+    }).attr('y', function (d) {
+        return d.y;
+    }).attr('dy', 4);
+}
+
+function renderLines(data) {
+    let link = d3.linkVertical()
+        .x(function (d) {
+            return d.x;
+        }).y(function (d) {
+            return d.y;
+        });
+
+    let lines = d3.select('#g_lines').selectAll('path').data(data);
+
+    lines.exit().remove();
+    lines.enter().append('path').merge(lines).classed('link', true).attr('d', link);
+}
+
+function renderTree(data) {
+    let root = d3.hierarchy(data, function children(d) {
+        let children = [];
+
+        if (Array.isArray(d)) {
+            return d;
+        }
+
+        if (Array.isArray(d.children)) {
+            return d.children;
+        }
+
+        if (d.left) {
+            children.push(d.left);
+        }
+        if (d.right) {
+            children.push(d.right);
+        }
+        if (d.expr) {
+            children.push(d.expr);
+        }
+
+        return children;
+    });
+
+    let bTree = d3.tree().nodeSize(NODE_SIZE);
+    let treeData = bTree(root);
+
+    //circles
+    renderCircles(treeData.descendants());
+
+    //texts
+    renderTexts(treeData.descendants());
+
+    //lines
+    renderLines(treeData.links());
+}
+
+function initSVG() {
+    let svg = d3.select("#container-result").append("svg").attr("width", svgW).attr("height", svgH)
+        .append("g").attr("transform", "translate(" + ROOT_POINT.x + "," + ROOT_POINT.y + ")");
+
+    svg.append("g").attr('id', "g_lines");
+    svg.append("g").attr("id", "g_circles");
+    svg.append("g").attr("id", "g_texts");
+}
+
+function initMathInput() {
+    let input = document.getElementById('input-math');
+    let button = document.getElementById('button-ok');
+
+    button.addEventListener('click', function () {
+        renderTree(interpreter.interpret(input.value));
+    });
+}
+
+function main() {
+    initSVG();
+    initMathInput();
+}
+
+main();
+
+
+/***/ }),
+/* 140 */
+/***/ (function(module, exports) {
+
+/*
+parse the Pascal program:
+
+BEGIN
+    BEGIN
+        number := 2;
+        a := number;
+        b := 10 * a + 10 * number / 4;
+        c := a - - b
+    END;
+    x := 11;
+END.
  */
 
 const [INTEGER, PLUS, MINUS, MUL, DIV, LPAREN, RPAREN, EOF] = ['INTEGER', 'PLUS', 'MINUS', 'MUL', 'DIV', '(', ')', 'EOF'];
 const PREFIRST = ['MUL', 'DIV'];
 const PRESECOND = ['PLUS', 'MINUS'];
+const [BEGIN, END, ID, DOT, SEMICOLON, ASSIGN, EMPTY, COMPOUND] = ['BEGIN', 'END', 'ID', 'DOT', 'SEMICOLON', 'ASSIGN', 'NOPE', 'COMPOUND'];
 
+//lexer
 class Token {
     constructor(type, value) {
         this.type = type;
@@ -5957,6 +5907,36 @@ class Token {
     }
 }
 
+const RESERVED_KEYWORDS = {
+    'BEGIN': new Token('BEGIN', 'BEGIN'),
+    'END': new Token('END', 'END'),
+};
+
+function isSpace(str) {
+    const space = /\s/;
+    return space.test(str);
+}
+
+function isNumber(str) {
+    const digit = /\d/;
+    return digit.test(str);
+}
+
+function isAlpha(str) {
+    const digit = /[a-zA-Z]/;
+    return digit.test(str);
+}
+
+function isColon(str) {
+    const digit = /^:$/;
+    return digit.test(str);
+}
+
+function isalnum(str) {
+    const digit = /^[a-zA-Z0-9]+$/;
+    return digit.test(str);
+}
+
 class Lexer {
     constructor(text) {
         this.text = text;
@@ -5965,11 +5945,12 @@ class Lexer {
     }
 
     static error() {
+        console.log(this.currentChar);
         throw 'Invalid character';
     }
 
     advance() {
-        var text = this.text;
+        let text = this.text;
         this.pos++;
         if (this.pos > text.length - 1) {
             this.currentChar = null;
@@ -5985,13 +5966,32 @@ class Lexer {
     }
 
     integer() {
-        var result = '';
+        let result = '';
         while (this.currentChar && isNumber(this.currentChar)) {
             result = result + this.currentChar;
             this.advance();
         }
 
         return Number(result);
+    }
+
+    peek() {
+        let peek_pos = this.pos + 1;
+        if (peek_pos > this.text.length - 1) {
+            return null;
+        }
+
+        return this.text[peek_pos];
+    }
+
+    id() {
+        let result = '';
+        while (this.currentChar && isalnum(this.currentChar)) {
+            result = result + this.currentChar;
+            this.advance();
+        }
+
+        return RESERVED_KEYWORDS[result] || new Token(ID, result);
     }
 
     getNextToken() {
@@ -6001,8 +6001,30 @@ class Lexer {
                 continue;
             }
 
+            if (isAlpha(this.currentChar)) {
+                //that is why we need define id first. isAlpha check is not enough?
+                //but python has not define id.
+                return this.id();
+            }
+
             if (isNumber(this.currentChar)) {
                 return new Token(INTEGER, this.integer())
+            }
+
+            if (isColon(this.currentChar) && this.peek() === "=") {
+                this.advance();
+                this.advance();
+                return new Token(ASSIGN, ":=");
+            }
+
+            if (this.currentChar === ";") {
+                this.advance();
+                return new Token(SEMICOLON, ';');
+            }
+
+            if (this.currentChar === ".") {
+                this.advance();
+                return new Token(DOT, '.');
             }
 
             if (this.currentChar === '+') {
@@ -6042,11 +6064,48 @@ class Lexer {
     }
 }
 
+//parse structure
+class Compound {
+    constructor(token) {
+        this.children = [];
+        this.token = token;
+    }
+}
+
+class Assign {
+    constructor(left, op, right) {
+        this.left = left;
+        this.token = op;
+        this.right = right;
+    }
+}
+
+class Var {
+    constructor(token) {
+        this.token = token;
+        this.value = token.value;
+    }
+}
+
+class NoOp {
+    constructor() {
+        this.token = new Token(EMPTY, 'NoOp');
+        this.value = "NoOp";
+    }
+}
+
 class BinOp {
     constructor(left, op, right) {
         this.left = left;
         this.token = op;
         this.right = right
+    }
+}
+
+class UnaryOp {
+    constructor(op, expr) {
+        this.token = op;
+        this.expr = expr;
     }
 }
 
@@ -6057,6 +6116,7 @@ class Num {
     }
 }
 
+//parser rules
 class Parser {
     constructor(lexer) {
         this.lexer = lexer;
@@ -6075,9 +6135,99 @@ class Parser {
         }
     }
 
+    //need eat?
+    empty() {
+      return new NoOp();
+    }
+
+    variable() {
+        let node =  new Var(this.currentToken);
+        this.eat(ID);
+        return node;
+    }
+
+    assign() {
+        let id = this.variable();
+        let assign = this.currentToken;
+        this.eat(ASSIGN);
+        let expr = this.expr();
+        return new Assign(id, assign, expr);
+    }
+
+    statement() {
+        let node;
+        if(this.currentToken.type === BEGIN) {
+            node = this.compound();
+            return node;
+        }
+
+        if(this.currentToken.type === ID) {
+            node = this.assign();
+            return node;
+        }
+
+        node = this.empty();
+        return node;
+
+    }
+
+    statementList() {
+        let node = this.statement();
+        let nodes = [node];
+
+        //use recursion?
+        if(this.currentToken.type === SEMICOLON) {
+            this.eat(SEMICOLON);
+            let childNodes = this.statementList();
+            nodes = nodes.concat(childNodes);
+        }
+
+        //you can also use while that use loop instead of recursion
+        // while (this.currentToken.type === SEMICOLON) {
+        //     this.eat(SEMICOLON);
+        //     nodes.push(this.statement());
+        // }
+
+        if(this.currentToken.type === ID) {
+            Parser.error("Do not expect ID!")
+        }
+        return nodes;
+    }
+
+    compound() {
+        this.eat(BEGIN);
+
+        let root = new Compound(new Token(COMPOUND, 'compound'));
+        let nodes = this.statementList();
+
+        this.eat(END);
+        root.children = nodes.slice();
+
+        return root;
+    }
+
+    program() {
+        let node = this.compound();
+        this.eat(DOT);
+        return node;
+    }
+
+    //factor: (plus | minus) factor | integer | lParen expr rParen
     factor() {
-        var token = this.currentToken;
-        var node;
+        let token = this.currentToken;
+        let node;
+
+        if (token.type === PLUS) {
+            this.eat(PLUS);
+            node = this.factor();
+            return new UnaryOp(new Token(PLUS, 'u+'), node);
+        }
+
+        if (token.type === MINUS) {
+            this.eat(MINUS);
+            node = this.factor();
+            return new UnaryOp(new Token(MINUS, 'u-'), node);
+        }
 
         if (token.type === INTEGER) {
             this.eat(INTEGER);
@@ -6090,13 +6240,16 @@ class Parser {
             this.eat(RPAREN);
             return node;
         }
+
+        node = this.variable();
+        return node;
     }
 
     term() {
-        var node = this.factor();
+        let node = this.factor();
 
         while (PREFIRST.includes(this.currentToken.type)) {
-            var token = this.currentToken;
+            let token = this.currentToken;
 
             if (token.type === MUL) {
                 this.eat(MUL);
@@ -6116,10 +6269,10 @@ class Parser {
      factor : INTEGER | LPAREN expr RPAREN
      */
     expr() {
-        var node = this.term();
+        let node = this.term();
 
         while (PRESECOND.includes(this.currentToken.type)) {
-            var token = this.currentToken;
+            let token = this.currentToken;
 
             if (token.type === PLUS) {
                 this.eat(PLUS);
@@ -6134,152 +6287,26 @@ class Parser {
     }
 }
 
+function interpret(operation) {
+    let lexer = new Lexer(operation);
+    let parser = new Parser(lexer);
+    let node = parser.program();
+    if(parser.currentToken.type !== EOF) {
+        Parser.error("Have not find EOF")
+    }
 
-function isSpace(str) {
-    const space = /\s/;
-    return space.test(str);
+    console.log(node);
+    return node;
 }
 
-function isNumber(str) {
-    const digit = /\d/;
-    return digit.test(str);
-}
-
-function main() {
-    var testString = process.argv[2];
-    var lexer = new Lexer(testString);
-    var parser = new Parser(lexer);
-    var result = parser.expr();
-    console.log(result);
-}
-
-// main();
-
-function calculate(operation) {
-    var lexer = new Lexer(operation);
-    var parser = new Parser(lexer);
-    return parser.expr();
-}
-
-exports.calculate = calculate;
+exports.interpret = interpret;
 
 
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(49)))
 
-/***/ }),
-/* 134 */,
-/* 135 */,
-/* 136 */
-/***/ (function(module, exports, __webpack_require__) {
 
-/**
- * version1 has some problem, so in v2:
- * 1.Use D3 adequately. we can d3-hierarchy, d3-shape
- * 2.Use group to set start.
- */
-
-var d3 = Object.assign({}, __webpack_require__(50), __webpack_require__(84), __webpack_require__(106));
-var calculator = __webpack_require__(133);
-
-const [svgW, svgH] = [800, 400];
-const [circleRadius] = [12];
-const NODE_SIZE = [80, 40];
-const ROOT_POINT = {x: 200, y: 40};
-
-function renderCircles(data) {
-    var circles = d3.select('#g_circles').selectAll('circle').data(data);
-
-    circles.exit().remove();
-
-    circles.enter().append('circle').attr('r', circleRadius).merge(circles).attr('cx', function (d) {
-        return d.x;
-    }).attr('cy', function (d) {
-        return d.y;
-    });
-}
-
-function renderTexts(data) {
-    var texts = d3.select('#g_texts').selectAll('text').data(data);
-
-    texts.exit().remove();
-
-    texts.enter().append('text').merge(texts).text(function (d) {
-        return d.data.token.value;
-    }).attr('x', function (d) {
-        return d.x;
-    }).attr('y', function (d) {
-        return d.y;
-    }).attr('dy', 4);
-}
-
-function renderLines(data) {
-    var link = d3.linkVertical()
-        .x(function (d) {
-            return d.x;
-        }).y(function (d) {
-            return d.y;
-        });
-
-    var lines = d3.select('#g_lines').selectAll('path').data(data);
-
-    lines.exit().remove();
-    lines.enter().append('path').merge(lines).classed('link', true).attr('d', link);
-}
-
-function renderTree(data) {
-    var root = d3.hierarchy(data, function children(d) {
-        var children = [];
-
-        if (d.left) {
-            children.push(d.left);
-        }
-        if (d.right) {
-            children.push(d.right);
-        }
-
-        return children;
-    });
-
-    var bTree = d3.tree().nodeSize(NODE_SIZE);
-    var treeData = bTree(root);
-
-    //circles
-    renderCircles(treeData.descendants());
-
-    //texts
-    renderTexts(treeData.descendants());
-
-    //lines
-    renderLines(treeData.links());
-}
-
-function initSVG() {
-    var svg = d3.select("#container-result").append("svg").attr("width", svgW).attr("height", svgH)
-        .append("g").attr("transform", "translate(" + ROOT_POINT.x + "," + ROOT_POINT.y + ")");
-
-    svg.append("g").attr('id', "g_lines");
-    svg.append("g").attr("id", "g_circles");
-    svg.append("g").attr("id", "g_texts");
-}
-
-function initMathInput() {
-    var input = document.getElementById('input-math');
-    var button = document.getElementById('button-ok');
-
-    button.addEventListener('click', function () {
-        renderTree(calculator.calculate(input.value));
-    });
-}
-
-function main() {
-    initSVG();
-    initMathInput();
-}
-
-main();
 
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=tree2.bundle.js.map
+//# sourceMappingURL=tree9.bundle.js.map

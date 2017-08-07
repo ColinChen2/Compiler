@@ -18,3 +18,8 @@ text {
     stroke: grey;
     stroke-width: 2px;
 }
+
+textarea {
+    min-height: 200px;
+    min-width: 200px;
+}

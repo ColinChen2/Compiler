@@ -15,7 +15,7 @@ END.
 const [INTEGER, PLUS, MINUS, MUL, DIV, LPAREN, RPAREN, EOF] = ['INTEGER', 'PLUS', 'MINUS', 'MUL', 'DIV', '(', ')', 'EOF'];
 const PREFIRST = ['MUL', 'DIV'];
 const PRESECOND = ['PLUS', 'MINUS'];
-const [BEGIN, END, ID, DOT, SEMICOLON, ASSIGN] = ['BEGIN', 'END', 'ID', '.', ';', ':='];
+const [BEGIN, END, ID, DOT, SEMICOLON, ASSIGN, EMPTY, COMPOUND] = ['BEGIN', 'END', 'ID', 'DOT', 'SEMICOLON', 'ASSIGN', 'NOPE', 'COMPOUND'];
 
 //lexer
 class Token {
@@ -45,7 +45,7 @@ function isNumber(str) {
 }
 
 function isAlpha(str) {
-    const digit = /\[a-zA-Z]/;
+    const digit = /[a-zA-Z]/;
     return digit.test(str);
 }
 
@@ -54,7 +54,7 @@ function isColon(str) {
     return digit.test(str);
 }
 
-function isalnum() {
+function isalnum(str) {
     const digit = /^[a-zA-Z0-9]+$/;
     return digit.test(str);
 }
@@ -67,6 +67,7 @@ class Lexer {
     }
 
     static error() {
+        console.log(this.currentChar);
         throw 'Invalid character';
     }
 
@@ -125,7 +126,7 @@ class Lexer {
             if (isAlpha(this.currentChar)) {
                 //that is why we need define id first. isAlpha check is not enough?
                 //but python has not define id.
-                return id();
+                return this.id();
             }
 
             if (isNumber(this.currentChar)) {
@@ -185,17 +186,18 @@ class Lexer {
     }
 }
 
-//parse
+//parse structure
 class Compound {
-    constructor() {
+    constructor(token) {
         this.children = [];
+        this.token = token;
     }
 }
 
 class Assign {
     constructor(left, op, right) {
         this.left = left;
-        this.op = op;
+        this.token = op;
         this.right = right;
     }
 }
@@ -209,10 +211,34 @@ class Var {
 
 class NoOp {
     constructor() {
+        this.token = new Token(EMPTY, 'NoOp');
         this.value = "NoOp";
     }
 }
 
+class BinOp {
+    constructor(left, op, right) {
+        this.left = left;
+        this.token = op;
+        this.right = right
+    }
+}
+
+class UnaryOp {
+    constructor(op, expr) {
+        this.token = op;
+        this.expr = expr;
+    }
+}
+
+class Num {
+    constructor(token) {
+        this.token = token;
+        this.value = token.value;
+    }
+}
+
+//parser rules
 class Parser {
     constructor(lexer) {
         this.lexer = lexer;
@@ -244,9 +270,10 @@ class Parser {
 
     assign() {
         let id = this.variable();
+        let assign = this.currentToken;
         this.eat(ASSIGN);
         let expr = this.expr();
-        return new Assign(id, ASSIGN, expr);
+        return new Assign(id, assign, expr);
     }
 
     statement() {
@@ -270,11 +297,21 @@ class Parser {
         let node = this.statement();
         let nodes = [node];
 
-        //should use while?
+        //use recursion?
         if(this.currentToken.type === SEMICOLON) {
             this.eat(SEMICOLON);
             let childNodes = this.statementList();
-            nodes.concat(childNodes);
+            nodes = nodes.concat(childNodes);
+        }
+
+        //you can also use while that use loop instead of recursion
+        // while (this.currentToken.type === SEMICOLON) {
+        //     this.eat(SEMICOLON);
+        //     nodes.push(this.statement());
+        // }
+
+        if(this.currentToken.type === ID) {
+            Parser.error("Do not expect ID!")
         }
         return nodes;
     }
@@ -282,13 +319,11 @@ class Parser {
     compound() {
         this.eat(BEGIN);
 
-        let root = new Compound();
+        let root = new Compound(new Token(COMPOUND, 'compound'));
         let nodes = this.statementList();
 
         this.eat(END);
-        for(let node in nodes) {
-            root.children.push(node);
-        }
+        root.children = nodes.slice();
 
         return root;
     }
@@ -298,7 +333,96 @@ class Parser {
         this.eat(DOT);
         return node;
     }
+
+    //factor: (plus | minus) factor | integer | lParen expr rParen
+    factor() {
+        let token = this.currentToken;
+        let node;
+
+        if (token.type === PLUS) {
+            this.eat(PLUS);
+            node = this.factor();
+            return new UnaryOp(new Token(PLUS, 'u+'), node);
+        }
+
+        if (token.type === MINUS) {
+            this.eat(MINUS);
+            node = this.factor();
+            return new UnaryOp(new Token(MINUS, 'u-'), node);
+        }
+
+        if (token.type === INTEGER) {
+            this.eat(INTEGER);
+            return new Num(token);
+        }
+
+        if (token.type === LPAREN) {
+            this.eat(LPAREN);
+            node = this.expr();
+            this.eat(RPAREN);
+            return node;
+        }
+
+        node = this.variable();
+        return node;
+    }
+
+    term() {
+        let node = this.factor();
+
+        while (PREFIRST.includes(this.currentToken.type)) {
+            let token = this.currentToken;
+
+            if (token.type === MUL) {
+                this.eat(MUL);
+            } else if (token.type === DIV) {
+                this.eat(DIV);
+            }
+
+            node = new BinOp(node, token, this.factor());
+        }
+
+        return node;
+    }
+
+    /*
+     expr   : term ((plus | minus) term)*
+     term   : factor ((MUL | DIV) factor)*
+     factor : INTEGER | LPAREN expr RPAREN
+     */
+    expr() {
+        let node = this.term();
+
+        while (PRESECOND.includes(this.currentToken.type)) {
+            let token = this.currentToken;
+
+            if (token.type === PLUS) {
+                this.eat(PLUS);
+            } else if (token.type === MINUS) {
+                this.eat(MINUS);
+            }
+
+            node = new BinOp(node, token, this.term());
+        }
+
+        return node;
+    }
 }
+
+function interpret(operation) {
+    let lexer = new Lexer(operation);
+    let parser = new Parser(lexer);
+    let node = parser.program();
+    if(parser.currentToken.type !== EOF) {
+        Parser.error("Have not find EOF")
+    }
+
+    console.log(node);
+    return node;
+}
+
+exports.interpret = interpret;
+
 
 
 
