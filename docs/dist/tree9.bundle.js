@@ -5763,10 +5763,10 @@ function stackValue(d, key) {
 const d3 = Object.assign({}, __webpack_require__(50), __webpack_require__(84), __webpack_require__(106));
 const interpreter = __webpack_require__(140);
 
-const [svgW, svgH] = [1000, 400];
+const [svgW, svgH] = [1000, 600];
 const [circleRadius] = [15];
-const NODE_SIZE = [80, 40];
-const ROOT_POINT = {x: 650, y: 40};
+const NODE_SIZE = [60, 60];
+const ROOT_POINT = {x: 500, y: 40};
 
 function renderCircles(data) {
     let circles = d3.select('#g_circles').selectAll('circle').data(data);
@@ -5808,6 +5808,10 @@ function renderLines(data) {
     lines.enter().append('path').merge(lines).classed('link', true).attr('d', link);
 }
 
+function separation(a, b) {
+    return (a.parent === b.parent ? 1 : 2) / a.depth + 1;
+}
+
 function renderTree(data) {
     let root = d3.hierarchy(data, function children(d) {
         let children = [];
@@ -5833,8 +5837,11 @@ function renderTree(data) {
         return children;
     });
 
-    let bTree = d3.tree().nodeSize(NODE_SIZE);
+    let bTree = d3.tree()
+        .nodeSize(NODE_SIZE)
+        .separation(separation);
     let treeData = bTree(root);
+    console.log(treeData);
 
     //circles
     renderCircles(treeData.descendants());
